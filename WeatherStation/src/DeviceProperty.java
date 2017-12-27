@@ -18,7 +18,7 @@ public class DeviceProperty {
 			//stream = new BufferedInputStream(new FileInputStream("/home/jonas/workspace/WeatherService/src/device.property"));
 			//stream = new BufferedInputStream(new FileInputStream("device.property"));
 			//Windows
-			stream = new BufferedInputStream(new FileInputStream("C:\\Users\\j.nyffeler\\git\\WeatherServer\\WeatherStation\\src\\device.property"));
+			stream = new BufferedInputStream(new FileInputStream("C:\\Users\\j.nyffeler\\git\\WeatherStation\\WeatherStation\\config\\device.property"));
 			log.log(Level.INFO,"call properties.load(stream)");
 			properties.load(stream);
 			stream.close();

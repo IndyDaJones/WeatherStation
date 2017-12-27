@@ -14,7 +14,7 @@ public class ServiceProperty {
 			//Linux
 			//stream = new BufferedInputStream(new FileInputStream("/home/jonas/workspace/WeatherService/src/service.property"));
 			//Windows
-			stream = new BufferedInputStream(new FileInputStream("C:\\Users\\j.nyffeler\\git\\WeatherServer\\WeatherStation\\src\\service.property"));
+			stream = new BufferedInputStream(new FileInputStream("config/service.property"));
 			
 			//Prod
 			//stream = new BufferedInputStream(new FileInputStream("service.property"));
