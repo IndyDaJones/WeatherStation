@@ -18,6 +18,7 @@ public class DBConnection {
 	private String serverName;
 	private String databaseName;
 	private String portNumber;
+	private String userName;
 	private Connection con;
 	DBConnectionProperty props;
 	Connection conn;
@@ -53,10 +54,11 @@ public class DBConnection {
 		    serverName = props.getDBProperty("Server");
 		    databaseName = props.getDBProperty("Database");
 		    portNumber = props.getDBProperty("Port");
+		    userName = props.getDBProperty("user");
 		    
 		    
 		    Properties connectionProps = new Properties();
-		    connectionProps.put("user", props.getDBProperty("user"));
+		    connectionProps.put("user", userName);
 		    connectionProps.put("password", props.getDBProperty("password"));
 		    log.log(Level.INFO,"call getConnection("+connectionProps.toString()+")");
 		    if (this.dbms.equals("mysql")) {
@@ -85,7 +87,7 @@ public class DBConnection {
 	 * @param humidity
 	 * @throws SQLException 
 	 */
-	public void insertData(Connection con, double temp, double humidity) throws SQLException{
+	public void insertData(Connection con, String status, String device, double temp, double humidity) throws SQLException{
 		try{
 			// create a sql date object so we can use it in our INSERT statement
 			Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
@@ -96,13 +98,13 @@ public class DBConnection {
 		 
 		    // create the mysql insert preparedstatement
 		    java.sql.PreparedStatement preparedStmt = con.prepareStatement(query);
-		    preparedStmt.setString (1, "NOK");
+		    preparedStmt.setString (1, status);
 		    preparedStmt.setDouble (2, temp);
 		    preparedStmt.setDouble (3, humidity);
 		    preparedStmt.setTimestamp   (4, currentTimestamp);
-		    preparedStmt.setString(5, DBConnection.class.getName() );
+		    preparedStmt.setString(5, device );
 		    preparedStmt.setTimestamp   (6, currentTimestamp);
-		    preparedStmt.setString(7, DBConnection.class.getName() );
+		    preparedStmt.setString(7, userName );
 		    log.log(Level.INFO,"Execute query: "+preparedStmt.toString());
 		    // execute the preparedstatement
 		    preparedStmt.execute();

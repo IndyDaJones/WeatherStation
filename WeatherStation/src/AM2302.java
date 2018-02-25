@@ -11,7 +11,8 @@ import java.util.concurrent.ScheduledExecutorService;
 
 public class AM2302 {
 	private static final Logger log = Logger.getLogger( WeatherStation.class.getName() );
-	private String device_return = "Temp=3.9*  Humidity=7.3%";
+	//private String device_return = "Temp=3.9*  Humidity=7.3%";
+	private String device_return;
 	double temperature;
 	double humidity;
 	DeviceProperty props;
@@ -27,13 +28,12 @@ public class AM2302 {
 		
 	public void getDatafromdevice(){
 		String command = "sudo "+props.getDeviceProperty("CommandSrc")+"/"+props.getDeviceProperty("CommandScpt").toString()+" "+props.getDeviceProperty("Device").toString()+" "+props.getDeviceProperty("GPIO").toString();
-		/*
+		
 		if(executeCommand(command)){
 			log.log(Level.INFO,"data successfully read from device!");
 		}else{
 			log.log(Level.WARNING,"no data read from device!");
 		}
-		*/
 	}
 	public boolean executeCommand(String command){
 		log.log(Level.INFO,"execute "+command);

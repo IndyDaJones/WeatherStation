@@ -22,7 +22,7 @@ public class DeviceHandler {
 			    public void run() {
 			        // Invoke method(s) to do the work
 			    	device.getDatafromdevice();
-			    	db.insertData("OK", device.getTemperature(), device.getHumidity());
+			    	db.insertData("AM2302","OK", device.getTemperature(), device.getHumidity());
 			    }
 			};
 			long Cycletime = Long.parseLong(props.getDeviceProperty("Cycletime"));
@@ -32,7 +32,7 @@ public class DeviceHandler {
 		AM2302 device = new AM2302 ();
 		while (true) {			    	
 					device.getDatafromdevice();
-			    	db.insertData("OK", device.getTemperature(), device.getHumidity());
+			    	db.insertData("AM2302", "OK", device.getTemperature(), device.getHumidity());
 			    	try {
 						Thread.sleep(5000);
 					} catch (InterruptedException e) {

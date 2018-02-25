@@ -23,10 +23,10 @@ public class DBHandler {
 	 * @param update_dt
 	 * @param update_by
 	 */
-	public void insertData(String status, double temperature, double humidity){
+	public void insertData(String devicename, String status, double temperature, double humidity){
 		try{
 			log.log(Level.INFO,"call insertTempHumidity");
-			connection.insertData(connection.getConnection(), temperature, humidity);	
+			connection.insertData(connection.getConnection(),status ,devicename , temperature, humidity);	
 		}catch (SQLException e){
 			log.log(Level.SEVERE,e.getLocalizedMessage());
 		}	

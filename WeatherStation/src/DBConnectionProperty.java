@@ -19,8 +19,8 @@ public class DBConnectionProperty {
 			//Linux
 			//stream = new BufferedInputStream(new FileInputStream("/home/jonas/workspace/WeatherService/src/database.property"));
 			//Windows
-			stream = new BufferedInputStream(new FileInputStream("C:\\Users\\j.nyffeler\\git\\WeatherStation\\WeatherStation\\config\\database.property"));
-			//stream = new BufferedInputStream(new FileInputStream("database.property"));
+			//stream = new BufferedInputStream(new FileInputStream("C:\\Users\\j.nyffeler\\git\\WeatherStation\\WeatherStation\\config\\database.property"));
+			stream = new BufferedInputStream(new FileInputStream("config/database.property"));
 			log.log(Level.INFO,"call properties.load(stream)");
 			properties.load(stream);
 			stream.close();
