@@ -1,3 +1,4 @@
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ServiceHandler {
@@ -9,9 +10,11 @@ public class ServiceHandler {
 		db = new DBHandler();
 	}
 	public void startService() {
+		log.log(Level.INFO,"Start Devices");
 		dev.startDevices(db);
-		
 	}
-	
+	public String getLogFilePath() {
+		return dev.getLogfilePath();
+	}
 	
 }

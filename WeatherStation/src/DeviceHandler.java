@@ -1,6 +1,7 @@
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DeviceHandler {
@@ -8,6 +9,9 @@ public class DeviceHandler {
 	DeviceProperty props;
 	public DeviceHandler() {
 		props = new DeviceProperty();
+	}
+	public String getLogfilePath() {
+		return props.getDeviceProperty("logFile").toString();
 	}
 	public void startDevices(DBHandler db) {
 		launchWhileAM2302(db);
@@ -34,10 +38,10 @@ public class DeviceHandler {
 					device.getDatafromdevice();
 			    	db.insertData("AM2302", "OK", device.getTemperature(), device.getHumidity());
 			    	try {
-						Thread.sleep(5000);
+			    		
+						Thread.sleep(Long.parseLong(props.getDeviceProperty("Cycletime")));
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						log.log(Level.SEVERE,"Exception catched " + e.getLocalizedMessage());
 					}
 			    }
 	}
