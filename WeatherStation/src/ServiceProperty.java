@@ -21,12 +21,13 @@ public class ServiceProperty {
 						properties.load(stream);
 			stream.close();
 		} catch (FileNotFoundException e) {
-			System.out.println(e.getMessage());
+			System.out.println(e.getLocalizedMessage());
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
+			System.out.println(e.getLocalizedMessage());
 		}
 	}
 	public String getServiceProperty(String key){
 		return properties.getProperty(key);
 	}
+	
 }

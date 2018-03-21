@@ -7,7 +7,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DeviceProperty {
-	private static final Logger log = Logger.getLogger( WeatherStation.class.getName() );
 	private Properties properties = new Properties();
 	public DeviceProperty(){
 		BufferedInputStream stream;
@@ -19,17 +18,15 @@ public class DeviceProperty {
 			stream = new BufferedInputStream(new FileInputStream("config/device.property"));
 			//Windows
 			//stream = new BufferedInputStream(new FileInputStream("C:\\Users\\j.nyffeler\\git\\WeatherStation\\WeatherStation\\config\\device.property"));
-			log.log(Level.INFO,"call properties.load(stream)");
 			properties.load(stream);
 			stream.close();
 		} catch (FileNotFoundException e) {
-			log.log(Level.SEVERE,e.getMessage());
+			System.out.println(e.getLocalizedMessage());
 		} catch (IOException e) {
-			log.log(Level.SEVERE,e.getMessage());
+			System.out.println(e.getLocalizedMessage());
 		}
 	}
 	public String getDeviceProperty(String key){
-		log.log(Level.INFO,"call properties.getProperty("+key+")");
 		return properties.getProperty(key);
 	}
 }

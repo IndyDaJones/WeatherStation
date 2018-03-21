@@ -9,7 +9,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DBConnectionProperty {
-	private static final Logger log = Logger.getLogger( WeatherStation.class.getName() );
 	private Properties properties = new Properties();
 	public DBConnectionProperty(){
 		BufferedInputStream stream;
@@ -17,21 +16,18 @@ public class DBConnectionProperty {
 			//Mac
 			//stream = new BufferedInputStream(new FileInputStream("/Users/Jonas/git/WeatherServer/WeatherStation/src/database.property"));
 			//Linux
-			//stream = new BufferedInputStream(new FileInputStream("/home/jonas/workspace/WeatherService/src/database.property"));
+			stream = new BufferedInputStream(new FileInputStream("config/database.property"));
 			//Windows
 			//stream = new BufferedInputStream(new FileInputStream("C:\\Users\\j.nyffeler\\git\\WeatherStation\\WeatherStation\\config\\database.property"));
-			stream = new BufferedInputStream(new FileInputStream("config/database.property"));
-			log.log(Level.INFO,"call properties.load(stream)");
 			properties.load(stream);
 			stream.close();
 		} catch (FileNotFoundException e) {
-			log.log(Level.SEVERE,e.getMessage());
+			System.out.println(e.getLocalizedMessage());
 		} catch (IOException e) {
-			log.log(Level.SEVERE,e.getMessage());
+			System.out.println(e.getLocalizedMessage());
 		}
 	}
 	public String getDBProperty(String key){
-		log.log(Level.INFO,"call properties.getProperty("+key+")");
 		return properties.getProperty(key);
 	}
 }

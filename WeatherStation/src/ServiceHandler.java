@@ -2,7 +2,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ServiceHandler {
-	private static final Logger log = Logger.getLogger( WeatherStation.class.getName() );
 	DeviceHandler dev;
 	DBHandler db;
 	public ServiceHandler() {
@@ -10,11 +9,42 @@ public class ServiceHandler {
 		db = new DBHandler();
 	}
 	public void startService() {
-		log.log(Level.INFO,"Start Devices");
+		log("Start Devices");
 		dev.startDevices(db);
 	}
 	public String getLogFilePath() {
 		return dev.getLogfilePath();
 	}
-	
+	/**
+	 * Loggt die uebergebene Meldung.
+	 * 
+	 * @param msg	Logmeldung
+	 **/
+	private static void log(String msg) {
+		WeatherStation.logInfo("ServiceHandler", msg);
+	}
+	/**
+	 * Loggt die uebergebene Meldung.
+	 * 
+	 * @param msg	Logmeldung
+	 **/
+	private static void logWarn(String msg) {
+		WeatherStation.logWarn("ServiceHandler", msg);
+	}
+	/**
+	 * Loggt die uebergebene Fehlermeldung.
+	 * 
+	 * @param msg	Logmeldung
+	 **/
+	private static void logError(String msg, Throwable thro) {
+		WeatherStation.logError("ServiceHandler", msg, thro);
+	}
+	/**
+	 * Loggt die uebergebene Fehlermeldung.
+	 * 
+	 * @param msg	Logmeldung
+	 **/
+	private static void logError(String msg) {
+		WeatherStation.logError("ServiceHandler", msg);
+	}
 }

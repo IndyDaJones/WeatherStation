@@ -10,7 +10,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 public class AM2302 {
-	private static final Logger log = Logger.getLogger( WeatherStation.class.getName() );
+	//private static final Logger log = Logger.getLogger( WeatherStation.class.getName() );
 	//private String device_return = "Temp=3.9*  Humidity=7.3%";
 	private String device_return;
 	double temperature;
@@ -24,19 +24,18 @@ public class AM2302 {
 		props = new DeviceProperty();
 
 	}
-
-		
+	
 	public void getDatafromdevice(){
 		String command = "sudo "+props.getDeviceProperty("CommandSrc")+"/"+props.getDeviceProperty("CommandScpt").toString()+" "+props.getDeviceProperty("Device").toString()+" "+props.getDeviceProperty("GPIO").toString();
 		
 		if(executeCommand(command)){
-			log.log(Level.INFO,"data successfully read from device!");
+			log("data successfully read from device!");
 		}else{
-			log.log(Level.WARNING,"no data read from device!");
+			logWarn("no data read from device!");
 		}
 	}
 	public boolean executeCommand(String command){
-		log.log(Level.INFO,"execute "+command);
+		log("execute "+command);
 		String tempDevRet = "";
 		Runtime r = Runtime.getRuntime();
 		Process p;
@@ -45,19 +44,19 @@ public class AM2302 {
 			p.waitFor();
 			BufferedReader b = new BufferedReader(new InputStreamReader(p.getInputStream()));
 			while ((tempDevRet = b.readLine()) != null) {
-				log.log(Level.INFO,"result from device <"+tempDevRet+">");
+				log("result from device <"+tempDevRet+">");
 				device_return = tempDevRet;
 			}
 			b.close();
-			log.log(Level.INFO,"call parseTemperature() <"+this.device_return+">");
+			log("call parseTemperature() <"+this.device_return+">");
 			parseTemperature();
-			log.log(Level.INFO,"call parseHumidity() <"+this.device_return+">");
+			log("call parseHumidity() <"+this.device_return+">");
 			parseHumidity();
 		} catch (IOException e) {
-			log.log(Level.SEVERE,e.getLocalizedMessage());
+			logError(e.getMessage(), e);
 			return false;
 		}catch (InterruptedException e) {
-			log.log(Level.SEVERE,e.getLocalizedMessage());
+			logError(e.getMessage(), e);
 			return false;
 		}
 		return true;
@@ -71,7 +70,7 @@ public class AM2302 {
 		String Temperature = device_return.substring(startTemperature, startHumidity);
 		int startResult = Temperature.indexOf("=")+1;
 		int endResult = Temperature.indexOf("*");
-		log.log(Level.INFO,"parseTemperature "+Temperature.substring(startResult, endResult));
+		log("parseTemperature "+Temperature.substring(startResult, endResult));
 		temperature = Double.parseDouble(Temperature.substring(startResult, endResult));
 	}
 	/**
@@ -83,7 +82,7 @@ public class AM2302 {
 		String Humidity = device_return.substring(startHumidity, this.device_return.length());
 		int startResult = Humidity.indexOf("=")+1;
 		int endResult = Humidity.indexOf("%");
-		log.log(Level.INFO,"parseHumidity "+Humidity.substring(startResult, endResult));
+		log("parseHumidity "+Humidity.substring(startResult, endResult));
 		humidity = Double.parseDouble(Humidity.substring(startResult, endResult));
 	}
 	/**
@@ -99,5 +98,29 @@ public class AM2302 {
 	 */
 	public double getHumidity(){
 		return humidity;
+	}
+	/**
+	 * Loggt die uebergebene Meldung.
+	 * 
+	 * @param msg	Logmeldung
+	 **/
+	private static void log(String msg) {
+		WeatherStation.logInfo("AM2302", msg);
+	}
+	/**
+	 * Loggt die uebergebene Meldung.
+	 * 
+	 * @param msg	Logmeldung
+	 **/
+	private static void logWarn(String msg) {
+		WeatherStation.logWarn("AM2302", msg);
+	}
+	/**
+	 * Loggt die uebergebene Fehlermeldung.
+	 * 
+	 * @param msg	Logmeldung
+	 **/
+	private static void logError(String msg, Throwable thro) {
+		WeatherStation.logError("AM2302", msg, thro);
 	}
 }

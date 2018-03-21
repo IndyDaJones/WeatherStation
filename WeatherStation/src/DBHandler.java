@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 import com.mysql.jdbc.Connection;
 
 public class DBHandler {
-	private static final Logger log = Logger.getLogger( WeatherStation.class.getName() );
 	DBConnection connection;
 	
 	public DBHandler() {
@@ -25,13 +24,45 @@ public class DBHandler {
 	 */
 	public void insertData(String devicename, String status, double temperature, double humidity){
 		try{
-			log.log(Level.INFO,"call insertTempHumidity");
+			log("call insertTempHumidity");
 			connection.insertData(connection.getConnection(),status ,devicename , temperature, humidity);	
 		}catch (SQLException e){
-			log.log(Level.SEVERE,e.getLocalizedMessage());
+			logError(e.getLocalizedMessage(),e);
 		}	
 	}
  public void closeDB() {
 	 
  }
+ 	/**
+	 * Loggt die uebergebene Meldung.
+	 * 
+	 * @param msg	Logmeldung
+	 **/
+	private static void log(String msg) {
+		WeatherStation.logInfo("DBHandler", msg);
+	}
+	/**
+	 * Loggt die uebergebene Meldung.
+	 * 
+	 * @param msg	Logmeldung
+	 **/
+	private static void logWarn(String msg) {
+		WeatherStation.logWarn("DBHandler", msg);
+	}
+	/**
+	 * Loggt die uebergebene Fehlermeldung.
+	 * 
+	 * @param msg	Logmeldung
+	 **/
+	private static void logError(String msg, Throwable thro) {
+		WeatherStation.logError("DBHandler", msg, thro);
+	}
+	/**
+	 * Loggt die uebergebene Fehlermeldung.
+	 * 
+	 * @param msg	Logmeldung
+	 **/
+	private static void logError(String msg) {
+		WeatherStation.logError("DBHandler", msg);
+	}
 }

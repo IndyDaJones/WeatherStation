@@ -5,7 +5,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DeviceHandler {
-	private static final Logger log = Logger.getLogger( WeatherStation.class.getName() );
 	DeviceProperty props;
 	public DeviceHandler() {
 		props = new DeviceProperty();
@@ -41,8 +40,40 @@ public class DeviceHandler {
 			    		
 						Thread.sleep(Long.parseLong(props.getDeviceProperty("Cycletime")));
 					} catch (InterruptedException e) {
-						log.log(Level.SEVERE,"Exception catched " + e.getLocalizedMessage());
+						logError(e.getLocalizedMessage(),e);
 					}
 			    }
+	}
+	/**
+	 * Loggt die uebergebene Meldung.
+	 * 
+	 * @param msg	Logmeldung
+	 **/
+	private static void log(String msg) {
+		WeatherStation.logInfo("DeviceHandler", msg);
+	}
+	/**
+	 * Loggt die uebergebene Meldung.
+	 * 
+	 * @param msg	Logmeldung
+	 **/
+	private static void logWarn(String msg) {
+		WeatherStation.logWarn("DeviceHandler", msg);
+	}
+	/**
+	 * Loggt die uebergebene Fehlermeldung.
+	 * 
+	 * @param msg	Logmeldung
+	 **/
+	private static void logError(String msg, Throwable thro) {
+		WeatherStation.logError("DeviceHandler", msg, thro);
+	}
+	/**
+	 * Loggt die uebergebene Fehlermeldung.
+	 * 
+	 * @param msg	Logmeldung
+	 **/
+	private static void logError(String msg) {
+		WeatherStation.logError("DeviceHandler", msg);
 	}
 }

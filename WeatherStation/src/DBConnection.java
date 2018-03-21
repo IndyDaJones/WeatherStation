@@ -13,7 +13,6 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
 public class DBConnection {
-	private static final Logger log = Logger.getLogger( WeatherStation.class.getName() );
 	private String dbms;
 	private String serverName;
 	private String databaseName;
@@ -40,7 +39,7 @@ public class DBConnection {
 			try {
 				this.con.close();
 			} catch (SQLException e) {
-				log.log(Level.SEVERE,"call closeDB() "+e.getMessage());
+				logError(e.getLocalizedMessage(), e);
 			}
 		}
 	}
@@ -60,7 +59,7 @@ public class DBConnection {
 		    Properties connectionProps = new Properties();
 		    connectionProps.put("user", userName);
 		    connectionProps.put("password", props.getDBProperty("password"));
-		    log.log(Level.INFO,"call getConnection("+connectionProps.toString()+")");
+		    log("call getConnection("+connectionProps.toString()+")");
 		    if (this.dbms.equals("mysql")) {
 		    	try{
 			        conn = (Connection)DriverManager.getConnection(
@@ -69,13 +68,13 @@ public class DBConnection {
 			                   ":" + portNumber + "/" +
 			                   databaseName,
 			                   connectionProps);
-			        log.log(Level.INFO,"Connected to database");
+			        log("Connected to database");
 		    	}catch (SQLException e){
-		    		log.log(Level.SEVERE,"DBConnection error " +e);
+		    		logError(e.getLocalizedMessage(), e);
 		    	} 
 		    }else {
 		    	conn = null;
-		    	log.log(Level.SEVERE,"Database unknown");
+		    	logError("Database unknown");
 		    }
 		    this.con = conn;
 		    return conn;
@@ -105,12 +104,12 @@ public class DBConnection {
 		    preparedStmt.setString(5, device );
 		    preparedStmt.setTimestamp   (6, currentTimestamp);
 		    preparedStmt.setString(7, userName );
-		    log.log(Level.INFO,"Execute query: "+preparedStmt.toString());
+		    log("Execute query: "+preparedStmt.toString());
 		    // execute the preparedstatement
 		    preparedStmt.execute();
-		    log.log(Level.INFO,"Query execution took: "+preparedStmt.getQueryTimeout() +"seconds");  
+		    log("Query execution took: "+preparedStmt.getQueryTimeout() +"seconds");  
 		} catch (SQLException e) {
-			log.log(Level.SEVERE,e.getLocalizedMessage());
+			logError(e.getLocalizedMessage(),e);
 			throw e;
 		}
 		}
@@ -122,7 +121,7 @@ public class DBConnection {
 	 */
 	public void insertLargeData(Connection con, String status, Double temperature, Double humidity, Timestamp create_dt, String create_by, Timestamp update_dt, String update_by) throws SQLException{
 		try{
-			log.log(Level.INFO,"Start method inserData(<"+con.toString()+">,<"+status+">,<"+temperature.toString()+">,<"+humidity.toString()+">,<"+create_dt.toString()+">,<"+create_by+">,<"+update_dt.toString()+">,<"+update_by+">)");
+			log("Start method inserData(<"+con.toString()+">,<"+status+">,<"+temperature.toString()+">,<"+humidity.toString()+">,<"+create_dt.toString()+">,<"+create_by+">,<"+update_dt.toString()+">,<"+update_by+">)");
 			// create a sql date object so we can use it in our INSERT statement
 			Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
 			
@@ -140,12 +139,12 @@ public class DBConnection {
 		    preparedStmt.setTimestamp   (6, update_dt);
 		    preparedStmt.setString(7, update_by );
 		    preparedStmt.setTimestamp   (8, currentTimestamp);
-		    log.log(Level.INFO,"Execute query: "+preparedStmt.toString());
+		    log("Execute query: "+preparedStmt.toString());
 		    // execute the preparedstatement
 		    preparedStmt.execute();
-		    log.log(Level.INFO,"Query execution took: "+preparedStmt.getQueryTimeout() +"seconds");  
+		    log("Query execution took: "+preparedStmt.getQueryTimeout() +"seconds");  
 		} catch (SQLException e) {
-			log.log(Level.SEVERE,e.getLocalizedMessage());
+			logError(e.getLocalizedMessage(),e);
 			throw e;
 		}
 		}
@@ -160,11 +159,44 @@ public class DBConnection {
 		        ResultSet rs = stmt.executeQuery(query);
 		        return rs;
 		    } catch (SQLException e ) {
-		    	log.log(Level.SEVERE,e.getLocalizedMessage());
+		    	logError(e.getLocalizedMessage(),e);
 		    	throw e;
 		    } finally {
-		    	log.log(Level.INFO,"Statement closed");
+		    	log("Statement closed");
 		        if (stmt != null) { stmt.close(); }
 		    }
+		}
+		
+		/**
+		 * Loggt die uebergebene Meldung.
+		 * 
+		 * @param msg	Logmeldung
+		 **/
+		private static void log(String msg) {
+			WeatherStation.logInfo("DBConnection", msg);
+		}
+		/**
+		 * Loggt die uebergebene Meldung.
+		 * 
+		 * @param msg	Logmeldung
+		 **/
+		private static void logWarn(String msg) {
+			WeatherStation.logWarn("DBConnection", msg);
+		}
+		/**
+		 * Loggt die uebergebene Fehlermeldung.
+		 * 
+		 * @param msg	Logmeldung
+		 **/
+		private static void logError(String msg, Throwable thro) {
+			WeatherStation.logError("DBConnection", msg, thro);
+		}
+		/**
+		 * Loggt die uebergebene Fehlermeldung.
+		 * 
+		 * @param msg	Logmeldung
+		 **/
+		private static void logError(String msg) {
+			WeatherStation.logError("DBConnection", msg);
 		}
 }
