@@ -16,6 +16,7 @@ public class AM2302 {
 	double temperature;
 	double humidity;
 	DeviceProperty props;
+	private static String topic = "AM2302         ";
 	
 	/**
 	 * Konstruktor
@@ -105,7 +106,7 @@ public class AM2302 {
 	 * @param msg	Logmeldung
 	 **/
 	private static void log(String msg) {
-		WeatherStation.logInfo("AM2302", msg);
+		WeatherStation.logInfo(topic, msg);
 	}
 	/**
 	 * Loggt die uebergebene Meldung.
@@ -113,7 +114,7 @@ public class AM2302 {
 	 * @param msg	Logmeldung
 	 **/
 	private static void logWarn(String msg) {
-		WeatherStation.logWarn("AM2302", msg);
+		WeatherStation.logWarn(topic, msg);
 	}
 	/**
 	 * Loggt die uebergebene Fehlermeldung.
@@ -121,6 +122,6 @@ public class AM2302 {
 	 * @param msg	Logmeldung
 	 **/
 	private static void logError(String msg, Throwable thro) {
-		WeatherStation.logError("AM2302", msg, thro);
+		WeatherStation.logError(topic, msg, thro);
 	}
 }

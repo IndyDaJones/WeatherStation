@@ -5,6 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DeviceHandler {
+	private static String topic = "DeviceHandler  ";
 	DeviceProperty props;
 	public DeviceHandler() {
 		props = new DeviceProperty();
@@ -50,7 +51,7 @@ public class DeviceHandler {
 	 * @param msg	Logmeldung
 	 **/
 	private static void log(String msg) {
-		WeatherStation.logInfo("DeviceHandler", msg);
+		WeatherStation.logInfo(topic, msg);
 	}
 	/**
 	 * Loggt die uebergebene Meldung.
@@ -58,7 +59,7 @@ public class DeviceHandler {
 	 * @param msg	Logmeldung
 	 **/
 	private static void logWarn(String msg) {
-		WeatherStation.logWarn("DeviceHandler", msg);
+		WeatherStation.logWarn(topic, msg);
 	}
 	/**
 	 * Loggt die uebergebene Fehlermeldung.
@@ -66,7 +67,7 @@ public class DeviceHandler {
 	 * @param msg	Logmeldung
 	 **/
 	private static void logError(String msg, Throwable thro) {
-		WeatherStation.logError("DeviceHandler", msg, thro);
+		WeatherStation.logError(topic, msg, thro);
 	}
 	/**
 	 * Loggt die uebergebene Fehlermeldung.
@@ -74,6 +75,6 @@ public class DeviceHandler {
 	 * @param msg	Logmeldung
 	 **/
 	private static void logError(String msg) {
-		WeatherStation.logError("DeviceHandler", msg);
+		WeatherStation.logError(topic, msg);
 	}
 }

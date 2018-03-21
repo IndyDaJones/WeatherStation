@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import com.mysql.jdbc.Connection;
 
 public class DBHandler {
+	private static String topic = "DBHandler      ";
 	DBConnection connection;
 	
 	public DBHandler() {
@@ -39,7 +40,7 @@ public class DBHandler {
 	 * @param msg	Logmeldung
 	 **/
 	private static void log(String msg) {
-		WeatherStation.logInfo("DBHandler", msg);
+		WeatherStation.logInfo(topic, msg);
 	}
 	/**
 	 * Loggt die uebergebene Meldung.
@@ -47,7 +48,7 @@ public class DBHandler {
 	 * @param msg	Logmeldung
 	 **/
 	private static void logWarn(String msg) {
-		WeatherStation.logWarn("DBHandler", msg);
+		WeatherStation.logWarn(topic, msg);
 	}
 	/**
 	 * Loggt die uebergebene Fehlermeldung.
@@ -55,7 +56,7 @@ public class DBHandler {
 	 * @param msg	Logmeldung
 	 **/
 	private static void logError(String msg, Throwable thro) {
-		WeatherStation.logError("DBHandler", msg, thro);
+		WeatherStation.logError(topic, msg, thro);
 	}
 	/**
 	 * Loggt die uebergebene Fehlermeldung.
@@ -63,6 +64,6 @@ public class DBHandler {
 	 * @param msg	Logmeldung
 	 **/
 	private static void logError(String msg) {
-		WeatherStation.logError("DBHandler", msg);
+		WeatherStation.logError(topic, msg);
 	}
 }

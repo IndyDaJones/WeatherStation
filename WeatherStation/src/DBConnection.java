@@ -13,6 +13,7 @@ import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
 public class DBConnection {
+	private static String topic = "DBConnection   ";
 	private String dbms;
 	private String serverName;
 	private String databaseName;
@@ -173,7 +174,7 @@ public class DBConnection {
 		 * @param msg	Logmeldung
 		 **/
 		private static void log(String msg) {
-			WeatherStation.logInfo("DBConnection", msg);
+			WeatherStation.logInfo(topic, msg);
 		}
 		/**
 		 * Loggt die uebergebene Meldung.
@@ -181,7 +182,7 @@ public class DBConnection {
 		 * @param msg	Logmeldung
 		 **/
 		private static void logWarn(String msg) {
-			WeatherStation.logWarn("DBConnection", msg);
+			WeatherStation.logWarn(topic, msg);
 		}
 		/**
 		 * Loggt die uebergebene Fehlermeldung.
@@ -189,7 +190,7 @@ public class DBConnection {
 		 * @param msg	Logmeldung
 		 **/
 		private static void logError(String msg, Throwable thro) {
-			WeatherStation.logError("DBConnection", msg, thro);
+			WeatherStation.logError(topic, msg, thro);
 		}
 		/**
 		 * Loggt die uebergebene Fehlermeldung.
@@ -197,6 +198,6 @@ public class DBConnection {
 		 * @param msg	Logmeldung
 		 **/
 		private static void logError(String msg) {
-			WeatherStation.logError("DBConnection", msg);
+			WeatherStation.logError(topic, msg);
 		}
 }
