@@ -20,8 +20,10 @@ public class DBConnection {
 	private String portNumber;
 	private String userName;
 	private Connection con;
-	DBConnectionProperty props;
-	Connection conn;
+	static DBConnectionProperty props;
+	static Connection connection = null;
+	/** Gecachte Datenbankverbindung wurde benutzt */
+	static boolean connectionReused = false;
 	
 	public DBConnection (){
 		props = new DBConnectionProperty();
@@ -44,30 +46,89 @@ public class DBConnection {
 			}
 		}
 	}
-	public Connection getConnection() throws SQLException {
-		if (this.con != null){
-			return this.con;
+	
+    /**
+	 * Gibt eine neu erstellte oder vom letzten Aufruf gecachte Verbindung zurueck.
+	 * Die zurueckgegebene Verbindung ist im Auto-Commit Modus.
+	 * Die Funktion ist synchronized, damit beim Aufstarten von einem anderen Thread
+	 * Die Verbindung aufgebaut werden kann.
+	 * 
+	 * @return Neu erstellte oder gecachte Verbindung zur Datenbank
+	 * @throws SQLException	wenn ein Datenbankfehler auftritt
+	 */
+	public static synchronized Connection getConnection() throws SQLException {
+		// Gecachte Verbindung pruefen
+		if (connection != null) {
+ 			if (connection.isClosed()) {
+				connection = null;
+	 			log("checking existing connection - is down");
+			} else {
+	 			//log("checking existing connection - seems allright");
+			}
+		}
+		
+		// Bei Bedarf neue Verbindung aufbauen
+		if (connection != null) {
+			connectionReused = true;
+			
+		} else {
+			connectionReused = false;
+			log("creating new connection...");
+			connection = createConnection();
+		}
+		return connection;
+	}
+	
+	/**
+	 * Create connection to Oracle database using the information found in
+	 * the application properties.
+	 *
+	 * @return			Created JDBC connection
+	 * @throws SQLException	in case of database failure
+	 */
+	public static Connection createConnection() throws SQLException {
+		String dbms = props.getDBProperty("dbms"); 
+		String server = props.getDBProperty("Server");
+		String port = props.getDBProperty("Port");
+		String database = props.getDBProperty("Database");
+		String username = props.getDBProperty("user");
+		String password = props.getDBProperty("password");
+		
+		return createConnection(dbms, server, port, database, username, password);
+	}
+	
+	
+	/**
+	 * Create connection to Oracle database using the thin client driver.
+	 * For this driver of JDBC type 4, no local installation of Oracle software is needed.
+	 * The connection is in auto-commit mode.
+	 * 
+	 * @param server	IP number or name of server
+	 * @param port		Port number to use (typically 1521)
+	 * @param database	Name of databaes
+	 * @param username	Username to use for login
+	 * @param password	Password to use for login
+	 * @return			Created JDBC connection
+	 * @throws SQLException	in case of database failure
+	 */
+    public static Connection createConnection(String dbms, String server, String port,
+    	String database, String username, String password) throws SQLException {
+    	if (connection != null){
+			return connection;
 		}
 		else{
 			Connection conn = null;
-		    dbms = props.getDBProperty("dbms");
-		    serverName = props.getDBProperty("Server");
-		    databaseName = props.getDBProperty("Database");
-		    portNumber = props.getDBProperty("Port");
-		    userName = props.getDBProperty("user");
-		    
-		    
 		    Properties connectionProps = new Properties();
-		    connectionProps.put("user", userName);
-		    connectionProps.put("password", props.getDBProperty("password"));
+		    connectionProps.put("user", username);
+		    connectionProps.put("password", password);
 		    log("call getConnection("+connectionProps.toString()+")");
-		    if (this.dbms.equals("mysql")) {
+		    if (dbms.equals("mysql")) {
 		    	try{
 			        conn = (Connection)DriverManager.getConnection(
 			                   "jdbc:" + dbms + "://" +
-			                   serverName +
-			                   ":" + portNumber + "/" +
-			                   databaseName,
+			                		   server +
+			                   ":" + port + "/" +
+			                   database,
 			                   connectionProps);
 			        log("Connected to database");
 		    	}catch (SQLException e){
@@ -77,10 +138,9 @@ public class DBConnection {
 		    	conn = null;
 		    	logError("Database unknown");
 		    }
-		    this.con = conn;
 		    return conn;
 		}
-	}
+    }
 	/**
 	 * This method is used to insert the measured temperature and humidity into the database given
 	 * @param temp

@@ -8,6 +8,7 @@ import com.mysql.jdbc.Connection;
 public class DBHandler {
 	private static String topic = "DBHandler      ";
 	DBConnection connection;
+	private ServiceDBThread dbThread;
 	
 	public DBHandler() {
 		connection = new DBConnection();
@@ -34,6 +35,9 @@ public class DBHandler {
  public void closeDB() {
 	 
  }
+ 	public DBConnection getConnection() {
+ 		return connection;
+ 	}
  	/**
 	 * Loggt die uebergebene Meldung.
 	 * 
@@ -65,5 +69,24 @@ public class DBHandler {
 	 **/
 	private static void logError(String msg) {
 		WeatherStation.logError(topic, msg);
+	}
+	/**
+	 * Timer-Thread starten.
+	 * 
+	 * @param display Displayobjekt
+	 */
+	public void startDBService() {
+		dbThread = new ServiceDBThread();
+		dbThread.start();
+	}
+	
+	/**
+	 * Timer-Thread stoppen.
+	 */
+	public void stopDBService() {
+		if (dbThread != null) {
+			dbThread.interrupt();
+			dbThread = null;
+		}
 	}
 }

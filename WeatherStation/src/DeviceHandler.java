@@ -7,6 +7,11 @@ import java.util.logging.Logger;
 public class DeviceHandler {
 	private static String topic = "DeviceHandler  ";
 	DeviceProperty props;
+	/** Background Thread, der periodisch die Datenbank ueberprueft */
+	private ServiceDeviceThread deviceThread;
+	AM2302 device = new AM2302 ();
+	
+	
 	public DeviceHandler() {
 		props = new DeviceProperty();
 	}
@@ -33,7 +38,7 @@ public class DeviceHandler {
 			executor.scheduleAtFixedRate(periodicTask, 0, Cycletime, TimeUnit.SECONDS);
 	}
 	private void launchWhileAM2302(DBHandler db) {
-		AM2302 device = new AM2302 ();
+		
 		while (true) {			    	
 					device.getDatafromdevice();
 			    	db.insertData("AM2302", "OK", device.getTemperature(), device.getHumidity());
@@ -44,6 +49,16 @@ public class DeviceHandler {
 						logError(e.getLocalizedMessage(),e);
 					}
 			    }
+	}
+	public void getDataFromAM2302() {
+		device.getDatafromdevice();
+	}
+	public double getTemperature() {
+		return device.getTemperature();
+	}
+	
+	public double getHumidity() {
+		return device.getHumidity();
 	}
 	/**
 	 * Loggt die uebergebene Meldung.
@@ -76,5 +91,24 @@ public class DeviceHandler {
 	 **/
 	private static void logError(String msg) {
 		WeatherStation.logError(topic, msg);
+	}
+	/**
+	 * Timer-Thread starten.
+	 * 
+	 * @param display Displayobjekt
+	 */
+	public void startDeviceService() {
+		deviceThread = new ServiceDeviceThread();
+		deviceThread.start();
+	}
+	
+	/**
+	 * Timer-Thread stoppen.
+	 */
+	public void stopDeviceService() {
+		if (deviceThread != null) {
+			deviceThread.interrupt();
+			deviceThread = null;
+		}
 	}
 }

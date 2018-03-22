@@ -1,20 +1,40 @@
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 public class ServiceHandler {
 	private static String topic = "ServiceHandler ";
+	public static ServiceState state;
 	DeviceHandler dev;
 	DBHandler db;
 	public ServiceHandler() {
-		dev = new DeviceHandler();
+		setServiceState(ServiceState.STARTUP);
+		initDatabase();
+		initDevice();
+	}
+	public void initDatabase(){
 		db = new DBHandler();
+	}
+	public DBHandler getDatabaseHandler() {
+		return db;
+	}
+	public DeviceHandler getDeviceHandler() {
+		return dev;
+	}
+	public void initDevice(){
+		dev = new DeviceHandler();
 	}
 	public void startService() {
 		log("Start Devices");
-		dev.startDevices(db);
+		setServiceState(ServiceState.RUN);
+		dev.startDeviceService();
+		db.startDBService();
 	}
 	public String getLogFilePath() {
 		return dev.getLogfilePath();
+	}
+	public ServiceState getServiceState() {
+		return state;
+	}
+	public static void setServiceState(ServiceState State) {
+		log("Service state changed to : <"+State+">");
+		state = State;
 	}
 	/**
 	 * Loggt die uebergebene Meldung.

@@ -16,9 +16,9 @@ public class DBConnectionProperty {
 			//Mac
 			//stream = new BufferedInputStream(new FileInputStream("/Users/Jonas/git/WeatherServer/WeatherStation/src/database.property"));
 			//Linux
-			stream = new BufferedInputStream(new FileInputStream("config/database.property"));
+			//stream = new BufferedInputStream(new FileInputStream("config/database.property"));
 			//Windows
-			//stream = new BufferedInputStream(new FileInputStream("C:\\Users\\j.nyffeler\\git\\WeatherStation\\WeatherStation\\config\\database.property"));
+			stream = new BufferedInputStream(new FileInputStream("C:\\Users\\j.nyffeler\\git\\WeatherStation\\WeatherStation\\config\\database.property"));
 			properties.load(stream);
 			stream.close();
 		} catch (FileNotFoundException e) {

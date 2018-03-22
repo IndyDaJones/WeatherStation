@@ -1,11 +1,5 @@
-import java.io.IOException;
-import java.util.logging.FileHandler;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 public class WeatherStation {
-	static ServiceHandler service;
+	static ServiceHandler service;;
 	/**
 	 * Instanz des Loggers
 	 **/
@@ -16,8 +10,9 @@ public class WeatherStation {
 			/**
 			 * Load WeatherService properties
 			 */
+			System.out.println("Start ");
 			initLogging();
-			logInfo("call startWeather()");
+			logInfo("call Start Service()");
 			startService();
 			logInfo("end main");
 		} catch (Exception e) {
@@ -30,8 +25,7 @@ public class WeatherStation {
 	 * Initialisiert Loggging.
 	 */
 	static void initLogging() {
-		service = new ServiceHandler();
-		final String logDir = service.getLogFilePath();
+		final String logDir = "C:\\Users\\j.nyffeler\\Desktop\\test\\log\\";
 		final String user = System.getProperty("user.name");
 		logger = new ServiceLogger(logDir, user);
 	}
@@ -40,6 +34,14 @@ public class WeatherStation {
 	 */
 	static void closeLogging() {
 		logger.close();
+	}
+	/**
+	 * Gibt ServiceHandler der Applikation zurueck.
+	 * 
+	 * @return Applikations-Handler
+	 */
+	static public ServiceHandler getServiceHandler() {
+		return service;
 	}
 	/**
 	 * Gibt Logger der Applikation zurueck.
@@ -129,6 +131,7 @@ public class WeatherStation {
 	 * This method creates a new database instance
 	 */
 	private static void startService(){
+		service = new ServiceHandler();
 		service.startService();
 	}
 }
