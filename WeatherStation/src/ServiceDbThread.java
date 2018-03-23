@@ -11,7 +11,7 @@ class ServiceDbThread extends Thread {
     /**
 	 * pollzyklus
 	 */
-	private static long wait = Long.parseLong(Integer.toString(ServiceProperties.getDbCycleTime()));
+	private static long wait;
 	/**
 	 * Next Variable
 	 */
@@ -23,7 +23,8 @@ class ServiceDbThread extends Thread {
 	 * 
 	 * @param display	Display, welcher fuer die Ausfuehrung von SWT-Funktionen benoetigt wird
 	 */
-	public void ServiceDBThread() {
+	public ServiceDbThread() {
+		wait = Long.parseLong(Integer.toString(ServiceProperties.getDbCycleTime()));
 	}
 	
 	
@@ -88,7 +89,7 @@ class ServiceDbThread extends Thread {
 					}
 				}
 				//TODO:
-				log("Check database connection and stuff: ");
+				log("Check database connection");
 				//handler.getDeviceHandler().getDataFromAM2302();
 				//sleep(wait);
 				// Wir benutzen syncExec(), um auf die Antwort zu warten

@@ -26,7 +26,7 @@ public class WeatherStation {
 	 * Initialisiert Properties.
 	 */
 	static void initProperties() {
-		new ServiceProperties("C:\\Users\\j.nyffeler\\git\\WeatherStation\\WeatherStation\\config\\service.property");
+		new ServiceProperties("config/service.property");
 	}
 	/**
 	 * Initialisiert Loggging.

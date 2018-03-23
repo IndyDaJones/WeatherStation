@@ -76,6 +76,7 @@ public class DBHandler {
 	 * @param display Displayobjekt
 	 */
 	public void startDBService() {
+		
 		dbThread = new ServiceDbThread();
 		dbThread.start();
 	}

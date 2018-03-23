@@ -162,7 +162,7 @@ public class DBConnection {
 		    preparedStmt.setTimestamp   (4, currentTimestamp);
 		    preparedStmt.setString(5, device );
 		    preparedStmt.setTimestamp   (6, currentTimestamp);
-		    preparedStmt.setString(7, userName );
+		    preparedStmt.setString(7, System.getProperty("user.name") );
 		    log("Execute query: "+preparedStmt.toString());
 		    // execute the preparedstatement
 		    preparedStmt.execute();

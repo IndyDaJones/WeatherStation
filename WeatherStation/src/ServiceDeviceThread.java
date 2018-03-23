@@ -99,25 +99,13 @@ class ServiceDeviceThread extends Thread {
 				}
 				//TODO:
 				handler.getDeviceHandler().setDeviceState(DeviceState.REQUEST);
-				log("Try to get Data from Device: handler.getDeviceHandler().getDataFromAM2302();");
-				//handler.getDeviceHandler().getDataFromAM2302();
+				//log("Try to get Data from Device: handler.getDeviceHandler().getDataFromAM2302();");
+				handler.getDeviceHandler().getDataFromAM2302();
 				//sleep(wait);
 				handler.getDeviceHandler().setDeviceState(DeviceState.FEEDBACK);
-				log("Try to insert data in Database: handler.getDatabaseHandler().insertData(\"AM2302\", \"OK\", handler.getDeviceHandler().getTemperature(), handler.getDeviceHandler().getHumidity())");
-				//handler.getDatabaseHandler().insertData("AM2302", "OK", handler.getDeviceHandler().getTemperature(), handler.getDeviceHandler().getHumidity());
+				//log("Try to insert data in Database: handler.getDatabaseHandler().insertData(\"AM2302\", \"OK\", handler.getDeviceHandler().getTemperature(), handler.getDeviceHandler().getHumidity())");
+				handler.getDatabaseHandler().insertData("AM2302", "OK", handler.getDeviceHandler().getTemperature(), handler.getDeviceHandler().getHumidity());
 				
-				// Wir benutzen syncExec(), um auf die Antwort zu warten
-				/*handler.syncExec(new Runnable() {
-					public void run() {
-						try {
-							controller.onTimer();
-						}
-						catch (Exception e) {
-							WeatherStation.logError("Unexpected error in background thread", e);
-						}
-					}
-				});
-				*/
 				// Konfigurierte Zeit warten
 				setNext(0);
 			    sleep(wait);
