@@ -11,17 +11,29 @@ class ServiceDeviceThread extends Thread {
     /**
 	 * pollzyklus
 	 */
-	private static long wait = Long.parseLong(Integer.toString(ServiceProperties.getDeviceCycleTime()));
+	private static long wait;
 	/**
 	 * Next Variable
 	 */
 	private volatile long next = 0;
+	
+	private static String topic = "DeviceThread   ";
+	
+	private static Devices device;
 	/**
 	 * Constructor.
 	 * 
 	 * @param display	Display, welcher fuer die Ausfuehrung von SWT-Funktionen benoetigt wird
 	 */
-	public void ServiceDeviceThread() {
+	public ServiceDeviceThread(Devices Devices) {
+		device = Devices;
+		if (device.equals(Devices.AM2302)){
+			wait = Long.parseLong(Integer.toString(ServiceProperties.getDeviceCycleTime()));
+		}else {
+			logError("Device cycletime property not set");
+			wait = 10000;
+		}
+		
 	}
 	
 	
@@ -86,10 +98,12 @@ class ServiceDeviceThread extends Thread {
 					}
 				}
 				//TODO:
-				WeatherStation.logInfo("Try to get Data from Device: handler.getDeviceHandler().getDataFromAM2302();");
+				handler.getDeviceHandler().setDeviceState(DeviceState.REQUEST);
+				log("Try to get Data from Device: handler.getDeviceHandler().getDataFromAM2302();");
 				//handler.getDeviceHandler().getDataFromAM2302();
 				//sleep(wait);
-				WeatherStation.logInfo("Try to insert data in Database: handler.getDatabaseHandler().insertData(\"AM2302\", \"OK\", handler.getDeviceHandler().getTemperature(), handler.getDeviceHandler().getHumidity())");
+				handler.getDeviceHandler().setDeviceState(DeviceState.FEEDBACK);
+				log("Try to insert data in Database: handler.getDatabaseHandler().insertData(\"AM2302\", \"OK\", handler.getDeviceHandler().getTemperature(), handler.getDeviceHandler().getHumidity())");
 				//handler.getDatabaseHandler().insertData("AM2302", "OK", handler.getDeviceHandler().getTemperature(), handler.getDeviceHandler().getHumidity());
 				
 				// Wir benutzen syncExec(), um auf die Antwort zu warten
@@ -113,4 +127,11 @@ class ServiceDeviceThread extends Thread {
 		}
 		WeatherStation.logInfo("Background thread ends");
 	}	
+	private static void log(String msg) {
+		WeatherStation.logInfo(topic, msg);
+	}
+	private static void logError(String msg) {
+		WeatherStation.logError(topic, msg);
+	}
+	
 }

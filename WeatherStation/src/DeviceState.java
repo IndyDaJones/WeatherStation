@@ -6,11 +6,15 @@
  */
 public enum DeviceState {
 	/** Service connects to device*/
+	START,
+	/** Service connects to device*/
 	CONNECT,
 	/** Service sends data request to device*/
 	REQUEST,
 	/** Service gets feedback from device*/
 	FEEDBACK,
 	/** Service disconnects from device*/
-	DISCONNET;
+	DISCONNET,
+	/** Service connects to device*/
+	STOP;
 }

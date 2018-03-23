@@ -8,7 +8,7 @@ import com.mysql.jdbc.Connection;
 public class DBHandler {
 	private static String topic = "DBHandler      ";
 	DBConnection connection;
-	private ServiceDBThread dbThread;
+	private ServiceDbThread dbThread;
 	
 	public DBHandler() {
 		connection = new DBConnection();
@@ -76,7 +76,7 @@ public class DBHandler {
 	 * @param display Displayobjekt
 	 */
 	public void startDBService() {
-		dbThread = new ServiceDBThread();
+		dbThread = new ServiceDbThread();
 		dbThread.start();
 	}
 	

@@ -6,44 +6,18 @@ import java.util.logging.Logger;
 
 public class DeviceHandler {
 	private static String topic = "DeviceHandler  ";
+	public static DeviceState state;
 	/** Background Thread, der periodisch die Datenbank ueberprueft */
 	private ServiceDeviceThread deviceThread;
 	AM2302 device = new AM2302 ();
 	
 	
 	public DeviceHandler() {
+		setDeviceState(DeviceState.START);
 	}
-	public void startDevices(DBHandler db) {
-		launchWhileAM2302(db);
-		//launchAM2302(db);
-	}
-	private void launchAM2302(DBHandler db) {
-		AM2302 device = new AM2302 ();
-		ScheduledExecutorService executor =
-			    Executors.newSingleThreadScheduledExecutor();
-
-			Runnable periodicTask = new Runnable() {
-			    public void run() {
-			        // Invoke method(s) to do the work
-			    	device.getDatafromdevice();
-			    	db.insertData("AM2302","OK", device.getTemperature(), device.getHumidity());
-			    }
-			};
-			long Cycletime = Long.parseLong(Integer.toString(ServiceProperties.getDeviceCycleTime()));
-			executor.scheduleAtFixedRate(periodicTask, 0, Cycletime, TimeUnit.SECONDS);
-	}
-	private void launchWhileAM2302(DBHandler db) {
-		
-		while (true) {			    	
-					device.getDatafromdevice();
-			    	db.insertData("AM2302", "OK", device.getTemperature(), device.getHumidity());
-			    	try {
-			    		
-						Thread.sleep(Long.parseLong(Integer.toString(ServiceProperties.getDeviceCycleTime())));
-					} catch (InterruptedException e) {
-						logError(e.getLocalizedMessage(),e);
-					}
-			    }
+	public static void setDeviceState(DeviceState State) {
+		log("Device state changed to : <"+State+">");
+		state = State;
 	}
 	public void getDataFromAM2302() {
 		device.getDatafromdevice();
@@ -93,7 +67,8 @@ public class DeviceHandler {
 	 * @param display Displayobjekt
 	 */
 	public void startDeviceService() {
-		deviceThread = new ServiceDeviceThread();
+		setDeviceState(DeviceState.CONNECT);
+		deviceThread = new ServiceDeviceThread(Devices.AM2302);
 		deviceThread.start();
 	}
 	
