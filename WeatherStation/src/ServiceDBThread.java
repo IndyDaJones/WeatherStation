@@ -11,7 +11,7 @@ class ServiceDBThread extends Thread {
     /**
 	 * pollzyklus
 	 */
-	private static long wait = Long.parseLong(DeviceProperty.getDeviceProperty("Cycletime"));
+	private static long wait = Long.parseLong(Integer.toString(ServiceProperties.getDbCycleTime()));
 	/**
 	 * Next Variable
 	 */
@@ -74,7 +74,7 @@ class ServiceDBThread extends Thread {
 		}
 		
 		// Background periodisch ausfuehren
-		while (!handler.getServiceState().equals(ServiceState.STOP)) {
+		while (!handler.getServiceState().equals(ServiceState.SHUTDOWN)) {
 			try {
 				long next = getNext();
 				if (next > 0) {

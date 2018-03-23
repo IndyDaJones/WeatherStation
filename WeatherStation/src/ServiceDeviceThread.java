@@ -11,7 +11,7 @@ class ServiceDeviceThread extends Thread {
     /**
 	 * pollzyklus
 	 */
-	private static long wait = Long.parseLong(DeviceProperty.getDeviceProperty("Cycletime"));
+	private static long wait = Long.parseLong(Integer.toString(ServiceProperties.getDeviceCycleTime()));
 	/**
 	 * Next Variable
 	 */

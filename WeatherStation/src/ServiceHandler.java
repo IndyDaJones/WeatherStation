@@ -23,11 +23,9 @@ public class ServiceHandler {
 	public void startService() {
 		log("Start Devices");
 		setServiceState(ServiceState.RUN);
-		dev.startDeviceService();
 		db.startDBService();
-	}
-	public String getLogFilePath() {
-		return dev.getLogfilePath();
+		dev.startDeviceService();
+		
 	}
 	public ServiceState getServiceState() {
 		return state;

@@ -85,6 +85,7 @@ public class DBHandler {
 	 */
 	public void stopDBService() {
 		if (dbThread != null) {
+			
 			dbThread.interrupt();
 			dbThread = null;
 		}

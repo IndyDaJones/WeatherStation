@@ -20,13 +20,11 @@ public class DBConnection {
 	private String portNumber;
 	private String userName;
 	private Connection con;
-	static DBConnectionProperty props;
 	static Connection connection = null;
 	/** Gecachte Datenbankverbindung wurde benutzt */
 	static boolean connectionReused = false;
 	
 	public DBConnection (){
-		props = new DBConnectionProperty();
 	}
 	public String getDbms(){
 		return this.dbms;
@@ -87,12 +85,12 @@ public class DBConnection {
 	 * @throws SQLException	in case of database failure
 	 */
 	public static Connection createConnection() throws SQLException {
-		String dbms = props.getDBProperty("dbms"); 
-		String server = props.getDBProperty("Server");
-		String port = props.getDBProperty("Port");
-		String database = props.getDBProperty("Database");
-		String username = props.getDBProperty("user");
-		String password = props.getDBProperty("password");
+		String dbms = ServiceProperties.getDbms(); 
+		String server = ServiceProperties.getDatabaseServer();
+		String port = Integer.toString(ServiceProperties.getDatabasePort());
+		String database = ServiceProperties.getDatabaseName();
+		String username = ServiceProperties.getDatabaseUsername();
+		String password = ServiceProperties.getDatabasePassword();
 		
 		return createConnection(dbms, server, port, database, username, password);
 	}

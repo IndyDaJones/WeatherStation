@@ -6,17 +6,12 @@ import java.util.logging.Logger;
 
 public class DeviceHandler {
 	private static String topic = "DeviceHandler  ";
-	DeviceProperty props;
 	/** Background Thread, der periodisch die Datenbank ueberprueft */
 	private ServiceDeviceThread deviceThread;
 	AM2302 device = new AM2302 ();
 	
 	
 	public DeviceHandler() {
-		props = new DeviceProperty();
-	}
-	public String getLogfilePath() {
-		return props.getDeviceProperty("logFile").toString();
 	}
 	public void startDevices(DBHandler db) {
 		launchWhileAM2302(db);
@@ -34,7 +29,7 @@ public class DeviceHandler {
 			    	db.insertData("AM2302","OK", device.getTemperature(), device.getHumidity());
 			    }
 			};
-			long Cycletime = Long.parseLong(props.getDeviceProperty("Cycletime"));
+			long Cycletime = Long.parseLong(Integer.toString(ServiceProperties.getDeviceCycleTime()));
 			executor.scheduleAtFixedRate(periodicTask, 0, Cycletime, TimeUnit.SECONDS);
 	}
 	private void launchWhileAM2302(DBHandler db) {
@@ -44,7 +39,7 @@ public class DeviceHandler {
 			    	db.insertData("AM2302", "OK", device.getTemperature(), device.getHumidity());
 			    	try {
 			    		
-						Thread.sleep(Long.parseLong(props.getDeviceProperty("Cycletime")));
+						Thread.sleep(Long.parseLong(Integer.toString(ServiceProperties.getDeviceCycleTime())));
 					} catch (InterruptedException e) {
 						logError(e.getLocalizedMessage(),e);
 					}

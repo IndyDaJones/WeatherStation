@@ -10,6 +10,7 @@ public class WeatherStation {
 			/**
 			 * Load WeatherService properties
 			 */
+			initProperties();
 			System.out.println("Start ");
 			initLogging();
 			logInfo("call Start Service()");
@@ -22,10 +23,16 @@ public class WeatherStation {
 
 	}
 	/**
+	 * Initialisiert Properties.
+	 */
+	static void initProperties() {
+		new ServiceProperties("C:\\Users\\j.nyffeler\\git\\WeatherStation\\WeatherStation\\config\\service.property");
+	}
+	/**
 	 * Initialisiert Loggging.
 	 */
 	static void initLogging() {
-		final String logDir = "C:\\Users\\j.nyffeler\\Desktop\\test\\log\\";
+		final String logDir = ServiceProperties.getLogDir();
 		final String user = System.getProperty("user.name");
 		logger = new ServiceLogger(logDir, user);
 	}

@@ -1,13 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 public class AM2302 {
 	//private static final Logger log = Logger.getLogger( WeatherStation.class.getName() );
@@ -15,19 +8,16 @@ public class AM2302 {
 	private String device_return;
 	double temperature;
 	double humidity;
-	DeviceProperty props;
 	private static String topic = "AM2302         ";
 	
 	/**
 	 * Konstruktor
 	 */
 	public AM2302 () {
-		props = new DeviceProperty();
-
 	}
 	
 	public void getDatafromdevice(){
-		String command = "sudo "+props.getDeviceProperty("CommandSrc")+"/"+props.getDeviceProperty("CommandScpt").toString()+" "+props.getDeviceProperty("Device").toString()+" "+props.getDeviceProperty("GPIO").toString();
+		String command = "sudo "+ServiceProperties.getCommandSrc()+"/"+ServiceProperties.getCommandScpt()+" "+ServiceProperties.getAm2302Device()+" "+ServiceProperties.getGPIO();
 		
 		if(executeCommand(command)){
 			log("data successfully read from device!");
