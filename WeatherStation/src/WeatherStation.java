@@ -1,5 +1,5 @@
 public class WeatherStation {
-	static ServiceHandler service;;
+	static ServiceController service;;
 	/**
 	 * Instanz des Loggers
 	 **/
@@ -47,7 +47,7 @@ public class WeatherStation {
 	 * 
 	 * @return Applikations-Handler
 	 */
-	static public ServiceHandler getServiceHandler() {
+	static public ServiceController getServiceHandler() {
 		return service;
 	}
 	/**
@@ -138,7 +138,8 @@ public class WeatherStation {
 	 * This method creates a new database instance
 	 */
 	private static void startService(){
-		service = new ServiceHandler();
+		new ServiceBuffer();
+		service = new ServiceController();
 		service.startService();
 	}
 }

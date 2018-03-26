@@ -144,7 +144,7 @@ public class ServiceProperties {
 	 */
 	public ServiceProperties(String file) {
 		if (instance != null)
-			throw new IllegalStateException("FriwilogProperties can only be initialized once");
+			throw new IllegalStateException("ServiceProperties can only be initialized once");
 		
 		instance = this;
 		this.file = file;

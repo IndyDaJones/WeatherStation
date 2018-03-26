@@ -5,12 +5,12 @@ import java.util.logging.Logger;
 
 import com.mysql.jdbc.Connection;
 
-public class DBHandler {
-	private static String topic = "DBHandler      ";
+public class DBController {
+	private static String topic = "DBController     ";
 	DBConnection connection;
 	private ServiceDbThread dbThread;
 	
-	public DBHandler() {
+	public DBController() {
 		connection = new DBConnection();
 		// TODO Auto-generated constructor stub
 	}
@@ -24,10 +24,10 @@ public class DBHandler {
 	 * @param update_dt
 	 * @param update_by
 	 */
-	public void insertData(String devicename, String status, double temperature, double humidity){
+	public void insertData(String devicename, String status, double temperature, double humidity, Timestamp createTimestamp){
 		try{
 			log("call insertTempHumidity");
-			connection.insertData(connection.getConnection(),status ,devicename , temperature, humidity);	
+			connection.insertData(connection.getConnection(),status ,devicename , temperature, humidity, createTimestamp);	
 		}catch (SQLException e){
 			logError(e.getLocalizedMessage(),e);
 		}	

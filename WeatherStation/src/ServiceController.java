@@ -1,24 +1,24 @@
-public class ServiceHandler {
-	private static String topic = "ServiceHandler ";
+public class ServiceController {
+	private static String topic = "ServiceController";
 	public static ServiceState state;
-	DeviceHandler dev;
-	DBHandler db;
-	public ServiceHandler() {
+	DeviceController dev;
+	DBController db;
+	public ServiceController() {
 		setServiceState(ServiceState.STARTUP);
 		initDatabase();
 		initDevice();
 	}
 	public void initDatabase(){
-		db = new DBHandler();
+		db = new DBController();
 	}
-	public DBHandler getDatabaseHandler() {
+	public DBController getDatabaseHandler() {
 		return db;
 	}
-	public DeviceHandler getDeviceHandler() {
+	public DeviceController getDeviceHandler() {
 		return dev;
 	}
 	public void initDevice(){
-		dev = new DeviceHandler();
+		dev = new DeviceController();
 	}
 	public void startService() {
 		log("Start Devices");

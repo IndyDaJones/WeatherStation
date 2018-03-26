@@ -17,7 +17,7 @@ class ServiceDbThread extends Thread {
 	 */
 	private volatile long next = 0;
 	
-	private static String topic = "DatabaseThread ";
+	private static String topic = "DatabaseThread   ";
 	/**
 	 * Constructor.
 	 * 
@@ -66,7 +66,7 @@ class ServiceDbThread extends Thread {
 	public void run() {	
 		log("Background thread starts");
 
-		final ServiceHandler handler = WeatherStation.getServiceHandler();
+		final ServiceController handler = WeatherStation.getServiceHandler();
 		
 		// Oeffne Datenbankverbindung
 		try {
@@ -89,26 +89,18 @@ class ServiceDbThread extends Thread {
 					}
 				}
 				//TODO:
-				log("Check database connection");
-				//handler.getDeviceHandler().getDataFromAM2302();
-				//sleep(wait);
-				// Wir benutzen syncExec(), um auf die Antwort zu warten
-				/*handler.syncExec(new Runnable() {
-					public void run() {
-						try {
-							controller.onTimer();
-						}
-						catch (Exception e) {
-							WeatherStation.logError("Unexpected error in background thread", e);
-						}
-					}
-				});
-				*/
+				log("Check buffer for DB");
+				while (ServiceBuffer.getBufferSize()>0) {
+					AM2302 data = ServiceBuffer.getBufferElement();
+					handler.getDatabaseHandler().insertData(data.getDevice(), "DB", data.getTemperature(), data.getHumidity(), data.getCreateTimestamp());
+					
+				}
 				// Konfigurierte Zeit warten
 				setNext(0);
-			    sleep(wait/3);
+			    sleep(wait);
 			}
 			catch (InterruptedException e) {
+				logError("Database error! No data added!");
 			}
 		}
 		WeatherStation.logInfo("Background thread ends");

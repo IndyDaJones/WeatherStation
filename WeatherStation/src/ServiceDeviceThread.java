@@ -17,7 +17,7 @@ class ServiceDeviceThread extends Thread {
 	 */
 	private volatile long next = 0;
 	
-	private static String topic = "DeviceThread   ";
+	private static String topic = "DeviceThread     ";
 	
 	private static Devices device;
 	/**
@@ -75,16 +75,8 @@ class ServiceDeviceThread extends Thread {
 	public void run() {	
 		WeatherStation.logInfo("Background thread starts");
 
-		final ServiceHandler handler = WeatherStation.getServiceHandler();
-		
-		// Oeffne Datenbankverbindung
-		try {
-			handler.getDatabaseHandler().getConnection();
-		}
-		catch (Exception e) {
-			WeatherStation.logError("Opening database connection failed", e);
-		}
-		
+		final ServiceController handler = WeatherStation.getServiceHandler();
+			
 		// Background periodisch ausfuehren
 		while (!handler.getServiceState().equals(ServiceState.STOP)) {
 			try {
@@ -98,14 +90,20 @@ class ServiceDeviceThread extends Thread {
 					}
 				}
 				//TODO:
+				
 				handler.getDeviceHandler().setDeviceState(DeviceState.REQUEST);
-				//log("Try to get Data from Device: handler.getDeviceHandler().getDataFromAM2302();");
+
 				handler.getDeviceHandler().getDataFromAM2302();
 				//sleep(wait);
 				handler.getDeviceHandler().setDeviceState(DeviceState.FEEDBACK);
-				//log("Try to insert data in Database: handler.getDatabaseHandler().insertData(\"AM2302\", \"OK\", handler.getDeviceHandler().getTemperature(), handler.getDeviceHandler().getHumidity())");
-				handler.getDatabaseHandler().insertData("AM2302", "OK", handler.getDeviceHandler().getTemperature(), handler.getDeviceHandler().getHumidity());
-				
+				AM2302 data = new AM2302(handler.getDeviceHandler().getTemperature(), handler.getDeviceHandler().getHumidity());
+				try {
+					log("Data element added to buffer <"+data.getDevice()+">");
+					ServiceBuffer.addBufferElement(data);
+				} catch (InterruptedException e) {
+					logError("Unable to add data element to buffer");
+					//TODO: Temporary storage of element which are not added to the main buffer
+				}
 				// Konfigurierte Zeit warten
 				setNext(0);
 			    sleep(wait);

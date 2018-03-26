@@ -1,18 +1,12 @@
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-public class DeviceHandler {
-	private static String topic = "DeviceHandler  ";
+public class DeviceController {
+	private static String topic = "DeviceController ";
 	public static DeviceState state;
 	/** Background Thread, der periodisch die Datenbank ueberprueft */
 	private ServiceDeviceThread deviceThread;
-	AM2302 device = new AM2302 ();
+	AM2302Handler device = new AM2302Handler ();
 	
 	
-	public DeviceHandler() {
+	public DeviceController() {
 		setDeviceState(DeviceState.START);
 	}
 	public static void setDeviceState(DeviceState State) {
