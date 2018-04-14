@@ -1,12 +1,16 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Random;
 
 public class AM2302Handler {
 	//private String device_return = "Temp=3.9*  Humidity=7.3%";
 	private String device_return;
 	double temperature;
 	double humidity;
+	Random r = new Random();
 	private static String topic = "AM2302Handler    ";
 	
 	/**
@@ -17,12 +21,16 @@ public class AM2302Handler {
 	
 	public void getDatafromdevice(){
 		String command = "sudo "+ServiceProperties.getCommandSrc()+"/"+ServiceProperties.getCommandScpt()+" "+ServiceProperties.getAm2302Device()+" "+ServiceProperties.getGPIO();
-		
+		/*From lora test*/
+		parseTemperature();
+		parseHumidity();
+		/*
 		if(executeCommand(command)){
 			log("data successfully read from device!");
 		}else{
 			logWarn("no data read from device!");
 		}
+		*/
 	}
 	public boolean executeCommand(String command){
 		log("execute "+command);
@@ -55,6 +63,7 @@ public class AM2302Handler {
 	 * 
 	 */
 	private void parseTemperature(){
+		/*
 		int startTemperature = device_return.indexOf("T");
 		int startHumidity = device_return.indexOf("H");
 		String Temperature = device_return.substring(startTemperature, startHumidity);
@@ -62,11 +71,17 @@ public class AM2302Handler {
 		int endResult = Temperature.indexOf("*");
 		log("parseTemperature "+Temperature.substring(startResult, endResult));
 		temperature = Double.parseDouble(Temperature.substring(startResult, endResult));
+		*/
+		//Random r = new Random();
+		double temp = 0 + (36 - 0) * r.nextDouble();
+		temperature = round(temp, 2);
 	}
+	
 	/**
 	 * 
 	 */
 	private void parseHumidity(){
+		/*
 		int startTemperature = device_return.indexOf("T");
 		int startHumidity = device_return.indexOf("H");
 		String Humidity = device_return.substring(startHumidity, this.device_return.length());
@@ -74,6 +89,18 @@ public class AM2302Handler {
 		int endResult = Humidity.indexOf("%");
 		log("parseHumidity "+Humidity.substring(startResult, endResult));
 		humidity = Double.parseDouble(Humidity.substring(startResult, endResult));
+		*/
+		//Random r = new Random();
+		double hum = 0 + (100 - 0) * r.nextDouble();
+		humidity = round(hum, 2);
+	}
+	/*From LORA Test*/
+	public static double round(double value, int places) {
+	    if (places < 0) throw new IllegalArgumentException();
+
+	    BigDecimal bd = new BigDecimal(value);
+	    bd = bd.setScale(places, RoundingMode.HALF_UP);
+	    return bd.doubleValue();
 	}
 	/**
 	 * 

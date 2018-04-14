@@ -7,7 +7,7 @@
  * @author Thomas Mauch
  * @version $Id: FriwilogTimerThread.java 2389 2009-10-12 10:24:44Z elsaboot $
  */
-class ServiceDeviceThread extends Thread {
+class ServiceLoraThread extends Thread {
     /**
 	 * pollzyklus
 	 */
@@ -17,23 +17,14 @@ class ServiceDeviceThread extends Thread {
 	 */
 	private volatile long next = 0;
 	
-	private static String topic = "DeviceThread     ";
-	
-	private static Devices device;
+	private static String topic = "LoraThread       ";
 	/**
 	 * Constructor.
 	 * 
 	 * @param display	Display, welcher fuer die Ausfuehrung von SWT-Funktionen benoetigt wird
 	 */
-	public ServiceDeviceThread(Devices Devices) {
-		device = Devices;
-		if (device.equals(Devices.AM2302)){
-			wait = Long.parseLong(Integer.toString(ServiceProperties.getDeviceCycleTime()));
-		}else {
-			logError("Device cycletime property not set");
-			wait = 10000;
-		}
-		
+	public ServiceLoraThread() {
+		wait = Long.parseLong(Integer.toString(ServiceProperties.getLoraCycleTime()));
 	}
 	
 	
@@ -73,46 +64,39 @@ class ServiceDeviceThread extends Thread {
 	 * @see java.lang.Runnable#run()
 	 */
 	public void run() {	
-		WeatherStation.logInfo("Background thread starts");
+		log("Background thread starts");
 
 		final ServiceController handler = WeatherStation.getServiceHandler();
-			
 		// Background periodisch ausfuehren
-		while (!handler.getServiceState().equals(ServiceState.STOP)) {
+		while (!handler.getServiceState().equals(ServiceState.SHUTDOWN)) {
 			try {
 				long next = getNext();
 				if (next > 0) {
 					long now = System.currentTimeMillis();
 					if (next > now) {
-						WeatherStation.logInfo("Background check deferred " + (next-now));
+						log("Background check deferred " + (next-now));
 						sleep(next-now);
 						continue;
 					}
 				}
 				//TODO:
-				
-				handler.getDeviceHandler().setDeviceState(DeviceState.REQUEST);
-
-				handler.getDeviceHandler().getDataFromAM2302();
-				//sleep(wait);
-				handler.getDeviceHandler().setDeviceState(DeviceState.FEEDBACK);
-				AM2302 data = new AM2302(handler.getDeviceHandler().getTemperature(), handler.getDeviceHandler().getHumidity());
-				try {
-					log("Data element added to buffer <"+data.getDevice()+">");
-					ServiceBuffer.addBufferElement(data);
-				} catch (InterruptedException e) {
-					logError("Unable to add data element to buffer");
-					//TODO: Temporary storage of element which are not added to the main buffer
+				log("Check buffer for LORA: <" + ServiceBuffer.getBufferSize()+">");
+			
+				while (ServiceBuffer.getBufferSize()>0) {
+					AM2302 data = ServiceBuffer.getBufferElement();
+					handler.getLoraHandler().sendData(data.getDevice(), "LORA", data.getTemperature(), data.getHumidity(), data.getCreateTimestamp());
+					sleep(5000);
 				}
 				// Konfigurierte Zeit warten
 				setNext(0);
 			    sleep(wait);
 			}
 			catch (InterruptedException e) {
+				logError("Database error! No data added!");
 			}
 		}
 		WeatherStation.logInfo("Background thread ends");
-	}	
+	}
 	private static void log(String msg) {
 		WeatherStation.logInfo(topic, msg);
 	}

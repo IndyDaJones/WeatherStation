@@ -3,10 +3,12 @@ public class ServiceController {
 	public static ServiceState state;
 	DeviceController dev;
 	DBController db;
+	LoraController lora;
 	public ServiceController() {
 		setServiceState(ServiceState.STARTUP);
 		initDatabase();
 		initDevice();
+		initLora();
 	}
 	public void initDatabase(){
 		db = new DBController();
@@ -17,14 +19,21 @@ public class ServiceController {
 	public DeviceController getDeviceHandler() {
 		return dev;
 	}
+	public LoraController getLoraHandler() {
+		return lora;
+	}
 	public void initDevice(){
 		dev = new DeviceController();
+	}
+	public void initLora(){
+		lora = new LoraController();
 	}
 	public void startService() {
 		log("Start Devices");
 		setServiceState(ServiceState.RUN);
 		db.startDBService();
 		dev.startDeviceService();
+		lora.startLoraService();
 		
 	}
 	public ServiceState getServiceState() {

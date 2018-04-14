@@ -1,13 +1,9 @@
-/**
- * Timer Thread.
- * Oeffnet die Datenbankverbindung und ueberprueft danach periodisch verschiedene Punkte.
- * Der Thread wird vom FriwilogController beim Start der Applikation gestartet und beim Schliessen
- * der Applikation beendet.
- * 
- * @author Thomas Mauch
- * @version $Id: FriwilogTimerThread.java 2389 2009-10-12 10:24:44Z elsaboot $
- */
-class ServiceDeviceThread extends Thread {
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class ServiceGPSThread extends Thread{
+
     /**
 	 * pollzyklus
 	 */
@@ -17,7 +13,7 @@ class ServiceDeviceThread extends Thread {
 	 */
 	private volatile long next = 0;
 	
-	private static String topic = "DeviceThread     ";
+	private static String topic = "GPSThread        ";
 	
 	private static Devices device;
 	/**
@@ -25,10 +21,10 @@ class ServiceDeviceThread extends Thread {
 	 * 
 	 * @param display	Display, welcher fuer die Ausfuehrung von SWT-Funktionen benoetigt wird
 	 */
-	public ServiceDeviceThread(Devices Devices) {
+	public ServiceGPSThread(Devices Devices) {
 		device = Devices;
 		if (device.equals(Devices.AM2302)){
-			wait = Long.parseLong(Integer.toString(ServiceProperties.getDeviceCycleTime()));
+			wait = Long.parseLong(Integer.toString(ServiceProperties.getGPSCycleTime()));
 		}else {
 			logError("Device cycletime property not set");
 			wait = 10000;
@@ -113,10 +109,64 @@ class ServiceDeviceThread extends Thread {
 		}
 		WeatherStation.logInfo("Background thread ends");
 	}	
+	
+	public void getDatafromdevice(){
+		// Starts the GPS RS232 communicaton
+		String command = " sudo cat /dev/ttyS0";
+		
+		if(executeCommand(command)){
+			log("data successfully read from gps device!");
+		}else{
+			logWarn("no data read from gps device!");
+		}
+	}
+	public boolean executeCommand(String command){
+		log("execute "+command);
+		String tempDevRet = "";
+		Runtime r = Runtime.getRuntime();
+		Process p;
+		try {
+			p = r.exec(command);
+			p.waitFor();
+			BufferedReader b = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			while ((tempDevRet = b.readLine()) != null) {
+				log("result from device <"+tempDevRet+">");
+
+			}
+			b.close();
+			log("call parseTemperature() <"+"result"+">");
+			log("call parseHumidity() <"+"result"+">");
+
+		} catch (IOException e) {
+			logError(e.getMessage(), e);
+			return false;
+		}catch (InterruptedException e) {
+			logError(e.getMessage(), e);
+			return false;
+		}
+		return true;
+	}
+	/**
+	 * Loggt die uebergebene Meldung.
+	 * 
+	 * @param msg	Logmeldung
+	 **/
+	private static void logWarn(String msg) {
+		WeatherStation.logWarn(topic, msg);
+	}
+	
 	private static void log(String msg) {
 		WeatherStation.logInfo(topic, msg);
 	}
 	private static void logError(String msg) {
 		WeatherStation.logError(topic, msg);
+	}
+	/**
+	 * Loggt die uebergebene Fehlermeldung.
+	 * 
+	 * @param msg	Logmeldung
+	 **/
+	private static void logError(String msg, Throwable thro) {
+		WeatherStation.logError(topic, msg, thro);
 	}
 }

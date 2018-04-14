@@ -16,7 +16,9 @@ public class ServiceProperties {
 	private static String databaseUsername;
 	private static String databasePassword;
 	private static int DevCycletime;
+	private static int GpsCycletime;
 	private static int DbCycletime;
+	private static int LoraCycletime;
 	private static String source;
 	private static String CommandSrc;
 	private static String CommandScpt;
@@ -80,6 +82,9 @@ public class ServiceProperties {
 	public static int getDeviceCycleTime() {
 		return DevCycletime;
 	}
+	public static int getGPSCycleTime() {
+		return GpsCycletime;
+	}
 	/**
 	 * Device Cycletime
 	 * @return Cycletime
@@ -87,7 +92,13 @@ public class ServiceProperties {
 	public static int getDbCycleTime() {
 		return DbCycletime;
 	}
-	
+	/**
+	 * Device Cycletime
+	 * @return Cycletime
+	 */
+	public static int getLoraCycleTime() {
+		return LoraCycletime;
+	}
 	/**
 	 * Device Source
 	 * @return source
@@ -159,7 +170,9 @@ public class ServiceProperties {
 		databasePassword = instance.getString("database.password");
 		logDir = instance.getString("service.logDir");
 		DevCycletime = instance.getInt("device.cycletime");
+		GpsCycletime = instance.getInt("device.cycletime.gps");
 		DbCycletime = instance.getInt("database.cycletime");
+		LoraCycletime = instance.getInt("lora.cycletime");
 		source = instance.getString("service.source");
 		CommandSrc = instance.getString("device.commandSrc");
 		CommandScpt = instance.getString("device.commandScpt");
