@@ -84,7 +84,7 @@ class ServiceLoraThread extends Thread {
 			
 				while (ServiceBuffer.getBufferSize()>0) {
 					AM2302 data = ServiceBuffer.getBufferElement();
-					handler.getLoraHandler().sendData(data.getDevice(), "LORA", data.getTemperature(), data.getHumidity(), data.getCreateTimestamp());
+					handler.getLoraHandler().sendData(data.getDevice(), "LORA", data.getTemperature(), data.getHumidity(), data.getCreateDate());
 					sleep(5000);
 				}
 				// Konfigurierte Zeit warten

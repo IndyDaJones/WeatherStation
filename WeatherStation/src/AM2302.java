@@ -1,11 +1,11 @@
-import java.sql.Timestamp;
-import java.util.Calendar;
+//import java.util.Calendar;
+import java.util.Date;
 
 public class AM2302 {
 	private String device;
 	private double temperature;
 	private double humidity;
-	Timestamp currentTimestamp;
+	Date currentDate;
 	
 	public AM2302(double Temperature, double Humidity) {
 		device = "AM2302";
@@ -13,7 +13,7 @@ public class AM2302 {
 		humidity = Humidity;
 		// create a sql date object so we can use it in our INSERT statement
 		// Create date;
-		currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
+		currentDate = new Date();
 	}
 	public String getDevice() {
 		return device;
@@ -24,7 +24,7 @@ public class AM2302 {
 	public double getHumidity() {
 		return humidity;
 	}
-	public Timestamp getCreateTimestamp() {
-		return currentTimestamp;
+	public Date getCreateDate() {
+		return currentDate;
 	}
 }

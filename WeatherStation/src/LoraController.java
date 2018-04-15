@@ -1,7 +1,9 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class LoraController {
 	private static String topic = "LoraController   ";
@@ -20,8 +22,11 @@ public class LoraController {
 	 * @param update_dt
 	 * @param update_by
 	 */
-	public void sendData(String devicename, String status, double temperature, double humidity, Timestamp createTimestamp){
-		String command = "sudo /home/lora/lmic_pi-master/examples/thethingsnetwork-send-v1/thethingsnetwork-send-v1 \"T"+temperature+",H"+humidity+","+createTimestamp+"\"";
+	public void sendData(String devicename, String status, double temperature, double humidity, Date createTimestamp){
+		SimpleDateFormat format = new SimpleDateFormat(ServiceProperties.getDateFormat());
+		String command = "";
+		
+		command = "sudo /home/lora/lmic_pi-master/examples/thethingsnetwork-send-v1/thethingsnetwork-send-v1 \"T"+temperature+";H"+humidity+";"+format.format(createTimestamp)+"\"";
 		
 		if(executeCommand(command)){
 			log("data successfully read from device!");

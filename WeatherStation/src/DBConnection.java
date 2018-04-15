@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -145,7 +146,7 @@ public class DBConnection {
 	 * @param humidity
 	 * @throws SQLException 
 	 */
-	public void insertData(Connection con, String status, String device, double temp, double humidity, Timestamp createTimestamp) throws SQLException{
+	public void insertData(Connection con, String status, String device, double temp, double humidity, Date createTimestamp) throws SQLException{
 		try{
 			// create a sql date object so we can use it in our INSERT statement
 			Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
@@ -159,7 +160,7 @@ public class DBConnection {
 		    preparedStmt.setString (1, status);
 		    preparedStmt.setDouble (2, temp);
 		    preparedStmt.setDouble (3, humidity);
-		    preparedStmt.setTimestamp   (4, createTimestamp);
+		    preparedStmt.setDate(4, (java.sql.Date) createTimestamp);
 		    preparedStmt.setString(5, device );
 		    preparedStmt.setTimestamp   (6, currentTimestamp);
 		    preparedStmt.setString(7, System.getProperty("user.name") );

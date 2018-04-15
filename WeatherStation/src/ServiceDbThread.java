@@ -92,7 +92,7 @@ class ServiceDbThread extends Thread {
 				log("Check buffer for DB");
 				while (ServiceBuffer.getBufferSize()>0) {
 					AM2302 data = ServiceBuffer.getBufferElement();
-					handler.getDatabaseHandler().insertData(data.getDevice(), "DB", data.getTemperature(), data.getHumidity(), data.getCreateTimestamp());
+					handler.getDatabaseHandler().insertData(data.getDevice(), "DB", data.getTemperature(), data.getHumidity(), data.getCreateDate());
 					
 				}
 				// Konfigurierte Zeit warten

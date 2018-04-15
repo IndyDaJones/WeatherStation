@@ -1,5 +1,6 @@
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,7 +25,7 @@ public class DBController {
 	 * @param update_dt
 	 * @param update_by
 	 */
-	public void insertData(String devicename, String status, double temperature, double humidity, Timestamp createTimestamp){
+	public void insertData(String devicename, String status, double temperature, double humidity, Date createTimestamp){
 		try{
 			log("call insertTempHumidity");
 			connection.insertData(connection.getConnection(),status ,devicename , temperature, humidity, createTimestamp);	

@@ -22,8 +22,10 @@ public class AM2302Handler {
 	public void getDatafromdevice(){
 		String command = "sudo "+ServiceProperties.getCommandSrc()+"/"+ServiceProperties.getCommandScpt()+" "+ServiceProperties.getAm2302Device()+" "+ServiceProperties.getGPIO();
 		/*From lora test*/
-		parseTemperature();
-		parseHumidity();
+		double temp = 0 + (36 - 0) * r.nextDouble();
+		double hum = 0 + (100 - 0) * r.nextDouble();
+		device_return = "Temp="+Double.toString(round(temp, 1))+"*  Humidity="+Double.toString(round(hum, 1))+"%";
+		/*From lora test*/
 		/*
 		if(executeCommand(command)){
 			log("data successfully read from device!");
@@ -31,6 +33,10 @@ public class AM2302Handler {
 			logWarn("no data read from device!");
 		}
 		*/
+		log("call parseTemperature() <"+this.device_return+">");
+		parseTemperature();
+		log("call parseHumidity() <"+this.device_return+">");
+		parseHumidity();
 	}
 	public boolean executeCommand(String command){
 		log("execute "+command);
@@ -46,10 +52,7 @@ public class AM2302Handler {
 				device_return = tempDevRet;
 			}
 			b.close();
-			log("call parseTemperature() <"+this.device_return+">");
-			parseTemperature();
-			log("call parseHumidity() <"+this.device_return+">");
-			parseHumidity();
+			
 		} catch (IOException e) {
 			logError(e.getMessage(), e);
 			return false;
@@ -63,7 +66,6 @@ public class AM2302Handler {
 	 * 
 	 */
 	private void parseTemperature(){
-		/*
 		int startTemperature = device_return.indexOf("T");
 		int startHumidity = device_return.indexOf("H");
 		String Temperature = device_return.substring(startTemperature, startHumidity);
@@ -71,28 +73,18 @@ public class AM2302Handler {
 		int endResult = Temperature.indexOf("*");
 		log("parseTemperature "+Temperature.substring(startResult, endResult));
 		temperature = Double.parseDouble(Temperature.substring(startResult, endResult));
-		*/
-		//Random r = new Random();
-		double temp = 0 + (36 - 0) * r.nextDouble();
-		temperature = round(temp, 2);
 	}
 	
 	/**
 	 * 
 	 */
-	private void parseHumidity(){
-		/*
-		int startTemperature = device_return.indexOf("T");
+	private void parseHumidity(){		int startTemperature = device_return.indexOf("T");
 		int startHumidity = device_return.indexOf("H");
 		String Humidity = device_return.substring(startHumidity, this.device_return.length());
 		int startResult = Humidity.indexOf("=")+1;
 		int endResult = Humidity.indexOf("%");
 		log("parseHumidity "+Humidity.substring(startResult, endResult));
 		humidity = Double.parseDouble(Humidity.substring(startResult, endResult));
-		*/
-		//Random r = new Random();
-		double hum = 0 + (100 - 0) * r.nextDouble();
-		humidity = round(hum, 2);
 	}
 	/*From LORA Test*/
 	public static double round(double value, int places) {

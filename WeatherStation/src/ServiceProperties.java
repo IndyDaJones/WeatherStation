@@ -20,6 +20,7 @@ public class ServiceProperties {
 	private static int DbCycletime;
 	private static int LoraCycletime;
 	private static String source;
+	private static String dateFormat;
 	private static String CommandSrc;
 	private static String CommandScpt;
 	private static int am2302;
@@ -106,6 +107,14 @@ public class ServiceProperties {
 	public static String getDeviceSource() {
 		return source;
 	}
+	
+	/**
+	 * Device Source
+	 * @return source
+	 */
+	public static String getDateFormat() {
+		return dateFormat;
+	}
 	/**
 	 * Command Srource
 	 * @return CommandSrc
@@ -174,6 +183,7 @@ public class ServiceProperties {
 		DbCycletime = instance.getInt("database.cycletime");
 		LoraCycletime = instance.getInt("lora.cycletime");
 		source = instance.getString("service.source");
+		dateFormat = instance.getString("service.dateformat");
 		CommandSrc = instance.getString("device.commandSrc");
 		CommandScpt = instance.getString("device.commandScpt");
 		am2302 = instance.getInt("device.AM2302");
