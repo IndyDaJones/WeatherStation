@@ -146,11 +146,11 @@ public class DBConnection {
 	 * @param humidity
 	 * @throws SQLException 
 	 */
-	public void insertData(Connection con, String status, String device, double temp, double humidity, Date createTimestamp) throws SQLException{
+	public void insertData(Connection con, String status, String device, double temp, double humidity, Timestamp createTimestamp) throws SQLException{
 		try{
 			// create a sql date object so we can use it in our INSERT statement
 			Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
-			
+						
 		    // the mysql insert statement
 		    String query = " insert into Weather (status, temperature, humidity, create_dt, create_by, update_dt, update_by)"
 		      + " values (?, ?, ?, ?, ?, ?, ?)";
@@ -160,7 +160,7 @@ public class DBConnection {
 		    preparedStmt.setString (1, status);
 		    preparedStmt.setDouble (2, temp);
 		    preparedStmt.setDouble (3, humidity);
-		    preparedStmt.setDate(4, (java.sql.Date) createTimestamp);
+		    preparedStmt.setTimestamp(4, createTimestamp);
 		    preparedStmt.setString(5, device );
 		    preparedStmt.setTimestamp   (6, currentTimestamp);
 		    preparedStmt.setString(7, System.getProperty("user.name") );

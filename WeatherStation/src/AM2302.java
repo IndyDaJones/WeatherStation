@@ -1,19 +1,26 @@
 //import java.util.Calendar;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
 
 public class AM2302 {
 	private String device;
 	private double temperature;
 	private double humidity;
-	Date currentDate;
-	
+	Timestamp currentDate;
+	/**
+	 * Object handles AM2302 sensor activities
+	 * 
+	 * @param Temperature xx.x degrees celcius
+	 * @param Humidity xx.x percentage
+	 */
 	public AM2302(double Temperature, double Humidity) {
 		device = "AM2302";
 		temperature = Temperature;
 		humidity = Humidity;
 		// create a sql date object so we can use it in our INSERT statement
 		// Create date;
-		currentDate = new Date();
+		currentDate = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
 	}
 	public String getDevice() {
 		return device;
@@ -24,7 +31,7 @@ public class AM2302 {
 	public double getHumidity() {
 		return humidity;
 	}
-	public Date getCreateDate() {
+	public Timestamp getCreateDate() {
 		return currentDate;
 	}
 }

@@ -91,7 +91,7 @@ public class LoraController {
 	/**
 	 * Timer-Thread starten.
 	 * 
-	 * @param display Displayobjekt
+	 * @param none no parameter Main object
 	 */
 	public void startLoraService() {
 		

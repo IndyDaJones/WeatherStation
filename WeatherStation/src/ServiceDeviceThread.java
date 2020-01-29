@@ -33,9 +33,7 @@ class ServiceDeviceThread extends Thread {
 			logError("Device cycletime property not set");
 			wait = 10000;
 		}
-		
 	}
-	
 	
 	/**
 	 * Verschiebt den naechsten Lauf des Backgroundthreads auf den jetzt aktuelllen
@@ -47,12 +45,11 @@ class ServiceDeviceThread extends Thread {
 		setNext(now + wait);
 	}
 	
-	
 	/**
 	 * Setze Member next synchronisiert.
 	 * @param next Counter
 	 */
-	 
+	
 	private synchronized void setNext(long next) {
 		this.next = next;
 	}

@@ -25,7 +25,7 @@ public class DBController {
 	 * @param update_dt
 	 * @param update_by
 	 */
-	public void insertData(String devicename, String status, double temperature, double humidity, Date createTimestamp){
+	public void insertData(String devicename, String status, double temperature, double humidity, Timestamp createTimestamp){
 		try{
 			log("call insertTempHumidity");
 			connection.insertData(connection.getConnection(),status ,devicename , temperature, humidity, createTimestamp);	

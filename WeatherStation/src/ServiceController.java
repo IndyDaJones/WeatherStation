@@ -4,6 +4,9 @@ public class ServiceController {
 	DeviceController dev;
 	DBController db;
 	LoraController lora;
+	/**
+	 * Constructor
+	 */
 	public ServiceController() {
 		setServiceState(ServiceState.STARTUP);
 		initDatabase();
